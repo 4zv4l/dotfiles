@@ -1,0 +1,33 @@
+{
+    "languageserver": {
+        "ccls": {
+            "command": "ccls",
+            "filetypes": [
+                "c",
+                "cpp",
+                "objc",
+                "objcpp"
+            ],
+            "rootPatterns": [
+                ".ccls",
+                "compile_commands.json",
+                ".vim/",
+                ".git/",
+                ".hg/"
+            ],
+            "initializationOptions": {
+                "cache": {
+                    "directory": "/tmp/ccls"
+                }
+            }
+        },
+		"zls": {
+			"command": "/usr/bin/zls",
+			"filetypes": ["zig"]
+		},
+		"nimlsp": {
+			"command": "/home/azz/.nimble/bin/nimlsp",
+			"filetypes": ["nim"]
+		}
+    }
+}

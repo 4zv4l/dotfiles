@@ -1,0 +1,117 @@
+# Reload Keybinds
+super + Escape
+    pkill -USR1 -x sxhkd
+
+# app launcher
+#{Super_L,Super_R}
+
+super + space
+  /home/azz/.config/polybar/blocks/scripts/launcher.sh
+
+# Terminal
+super + Return
+	kitty
+
+# take screenshot
+super + p
+    scrot -d 1 -e 'mv $f ~/Pictures/Screenshots/'
+
+# GUI Apps
+super + e
+    nautilus
+
+# close app
+super + q
+    berryc window_close
+
+# lock screen
+super + l
+    i3lock -i Pictures/wallpapers/wall.png
+
+# Function Keys
+XF86MonBrightness{Up,Down}
+	brightnessctl s 20{+,-}
+XF86Audio{RaiseVolume,LowerVolume,Mute}
+	pactl set-sink-volume @DEFAULT_SINK@ {+,-}5%
+XF86AudioMute
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+XF86Audio{Next,Prev,Play}
+    playerctl -p spotify,%any,firefox,chromium,brave,mpd{ next, previous, play-pause}
+XF86AudioStop
+    playerctl -a stop
+
+# Window Manager
+# Grow/Shink Window
+super + shift +  {Left, Down, Up, Right}
+    berryc window_resize {-50 0, 0 50, 0 -50, 50 0}
+super + ctrl + {Left, Down, Up, Right}
+    berryc window_move {-50 0, 0 50, 0 -50, 50 0}
+
+# Tiling
+super + Left
+    berryc snap_left
+super + Right
+    berryc snap_right
+super + Up
+    berryc window_monocle
+super + Down
+    berryc window_resize_absolute 1000 650 && berryc window_center
+
+# Go to Tag
+super + ampersand
+    berryc switch_workspace 0
+super + eacute
+    berryc switch_workspace 1
+super + quotedbl
+    berryc switch_workspace 2
+super + apostrophe
+    berryc switch_workspace 3
+super + parenleft
+    berryc switch_workspace 4
+
+# Move to Tag
+super + shift + 1
+    berryc send_to_workspace 0
+super + shift + 2
+    berryc send_to_workspace 1
+super + shift + 3
+    berryc send_to_workspace 2
+super + shift + 4
+    berryc send_to_workspace 3
+super + shift + 5
+    berryc send_to_workspace 4
+
+# restart
+super + shift + r
+    ~/.config/berry/autostart
+
+# Fullscreen
+super + f
+    berryc fullscreen
+
+# Toggle Titlebar
+super + v
+    berryc toggle_decorations
+
+# Alt Tab
+alt + Tab
+    berryc cycle_focus
+
+# Center Focused Window
+super + c
+    berryc window_center
+
+super + m
+    berryc window_monocle
+
+# Close Window
+super + x
+    berryc window_close
+
+# Quit
+super + shift + q
+    berryc quit
+
+# Mouse Buttons
+~button1
+    berryc pointer_focus

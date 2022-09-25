@@ -1,0 +1,10 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =8
+let g:netrw_dirhist_8='/mnt/c/Users/Simon/Documents/git/code/Go/tochat/pkg'
+let g:netrw_dirhist_7='/mnt/c/Users/Simon/Documents/git/code/Go/tochat'
+let g:netrw_dirhist_6='/mnt/c/Users/Simon/Documents/git/ransomware/src'
+let g:netrw_dirhist_5='/mnt/c/Users/Simon/Documents/git/ransomware'
+let g:netrw_dirhist_4='/mnt/c/Users/Simon/Documents/git/ransom/src'
+let g:netrw_dirhist_3='/mnt/c/Users/Simon/Documents/git/ransom'
+let g:netrw_dirhist_2='/mnt/c/Users/Simon/Documents/git/code/C/divers/tmp'
+let g:netrw_dirhist_1='/mnt/c/Users/Simon/Documents/git/code/Go/todo'
