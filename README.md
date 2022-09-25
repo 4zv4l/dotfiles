@@ -6,3 +6,5 @@
 - nvim (text editor)
 - polybar (status bar)
 - picom (compositor)
+- kitty (terminal)
+- rofi (launcher)
