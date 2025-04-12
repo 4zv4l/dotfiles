@@ -1,6 +1,3 @@
-# source .profile
-. ~/.profile
-
 # history setup
 HISTFILESIZE=50000
 HISTSIZE=$HISTFILESIZE
