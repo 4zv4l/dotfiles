@@ -1,4 +1,5 @@
 (define-module (guix-home-config)
+  #:use-module (ice-9 string-fun)
   #:use-module (gnu packages)
   #:use-module (gnu home)
   #:use-module (gnu home services)
@@ -7,26 +8,45 @@
   #:use-module (gnu services)
   #:use-module (gnu system shadow))
 
-(home-environment
+(define %PATH
+  (string-replace-substring
+    (string-join
+      (list "$HOME/.local/bin"
+            "$HOME/perl5/bin"
+            "$PATH") ":")
+    "$HOME" (getenv "HOME")))
 
-  (packages (list
-    (specification->package "tmux")
-    (specification->package "neovim")
-    (specification->package "perl")
-    (specification->package "python")
-    (specification->package "zig")
-    (specification->package "mtr")
-    (specification->package "nmap")
-    (specification->package "sqlite")
-    (specification->package "strace")))
+(display %PATH)
+
+(home-environment
+  (packages
+    (specifications->packages
+      (list "tmux"
+            "neovim"
+            "bat"
+            "lsd"
+            "perl"
+            "python"
+            "nushell"
+            "zoxide"
+            "nmap")))
 
   (services
-    (append
-      (list
-        (service home-bash-service-type)
-
-	(service home-dotfiles-service-type
-	  (home-dotfiles-configuration
-	    (directories (list "./dotfiles")))))
-
+    (cons*
+      ;; basic bash setup
+      (service home-bash-service-type
+               (home-bash-configuration
+                 (environment-variables
+                   `(("PATH"   . ,%PATH)
+                     ("PS1"    . "$(history -a;history -n)$PS1")
+                     ("EDITOR" . "nvim")))
+                 (aliases
+                   '(("cat" . "bat")
+                     ("ls"  . "lsd")
+                     ("v"   . "nvim")
+                     ("nu"  . "clear;nu")))))
+      ;; copy dotfiles as symlinks
+	  (service home-dotfiles-service-type
+	      (home-dotfiles-configuration
+	      (directories (list "./dotfiles"))))
       %base-home-services)))
