@@ -16,7 +16,6 @@ eval "$(zoxide init bash)"
 # setup perl
 eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
 PERL5LIB="$PERL5LIB:./local/lib/perl5"
-PATH="$HOME/perl5/bin:$PATH"
 
 # setup path
 PATHS="$HOME/.local/bin
@@ -32,6 +31,10 @@ $HOME/.rvm/bin
 /bin
 /sbin"
 PATH="$(echo -n "$PATHS" | tr "\n" ":")"
+
+# setup guix
+GUIX_PROFILE="$HOME/.guix-profile"
+export PATH="$GUIX_PROFILE/bin:$HOME/.config/guix/current/bin:$PATH"
 
 # setup export
 export EDITOR=nvim
