@@ -1,5 +1,9 @@
 -- Setup language servers.
 local lspconfig = require("lspconfig")
+-- Guile
+lspconfig.guile_ls.setup {
+    filetypes = {"scheme", "guile"}
+}
 -- C
 lspconfig.clangd.setup{}
 -- zig
