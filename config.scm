@@ -33,6 +33,7 @@
     (specifications->packages
       (list "tmux"
             "zoxide"
+            "fzf"
             ;;"neovim" version from guix is not yet 10
             "bat"
             "lsd"
@@ -62,11 +63,17 @@
           (aliases
             '(("cat" . "bat")
               ("ls"  . "lsd")
-              ("v"   . "nvim")))))
+              ("v"   . "nvim")))
+          (bashrc
+            (list (plain-file "rc"
+                    (string-join
+                      (list "eval \"$(zoxide init bash)\""
+                            "eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)")
+                      "\n"))))))
       ;; copy dotfiles as symlinks
-	  (service home-dotfiles-service-type
-	    (home-dotfiles-configuration
-	    (directories (list "./dotfiles"))))
+      (service home-dotfiles-service-type
+        (home-dotfiles-configuration
+        (directories (list "dotfiles"))))
       ;; shepherd services
       (service home-shepherd-service-type
         (home-shepherd-configuration
