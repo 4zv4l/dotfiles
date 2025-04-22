@@ -280,7 +280,7 @@ theme "catppuccin-mocha"
 // The name of the default layout to load on startup
 // Default: "default"
 //
-layout_dir "$HOME/.config/zellij"
+layout_dir "/home/azz/.config/zellij"
 default_layout "my-layout"
 
 // Choose the mode that zellij uses when starting up.
