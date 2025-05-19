@@ -81,6 +81,8 @@
   :config
   (setq-default org-latex-compiler "pdflatex")
   (setq org-html-validation-link nil)
+;; export org to html
+(use-package htmlize)
 
 ;; Org babel setting
   (org-babel-do-load-languages
@@ -121,7 +123,7 @@
 ;; (inhibit-startup-screen t)
 
 ;; font setpu
-(set-frame-font "FiraCode Nerd Font 12" nil t)
+(set-frame-font "FiraCode Nerd Font 13" nil t)
 
 ;; hide toolbar
 (tool-bar-mode -1)
@@ -168,9 +170,9 @@
  '(package-selected-packages
    '(ace-window auto-virtualenv catppuccin-theme company corfu
 		counsel-projectile doom-themes easysession eat
-		flycheck go-mode json-mode lsp-python-ms lua-mode
-		magit nerd-fonts nerd-icons org-modern org-superstar
-		perl-doc pyvenv smex vertico zig-mode))
+		flycheck go-mode htmlize json-mode lsp-python-ms
+		lua-mode magit nerd-fonts nerd-icons org-modern
+		org-superstar perl-doc pyvenv smex vertico zig-mode))
  '(tab-bar-mode nil)
  '(tab-bar-show 1))
 (custom-set-faces
