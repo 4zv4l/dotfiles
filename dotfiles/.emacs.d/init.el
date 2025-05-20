@@ -83,6 +83,8 @@
   :config
   (setq-default org-latex-compiler "pdflatex")
   (setq org-html-validation-link nil)
+  ; avoid indent in src block
+  ; (setq-default org-edit-src-content-indentation 0)
   (use-package org-superstar)
   (add-hook 'org-mode-hook #'olivetti-mode)
   (add-hook 'org-mode-hook #'org-superstar-mode)
@@ -153,6 +155,9 @@
 ;; smooth scrolling
 (setq scroll-conservatively 101)
 
+;; update buffer on file change
+(global-auto-revert-mode)
+
 ;; bindings
 (global-set-key (kbd "M-<left>")  'windmove-left)
 (global-set-key (kbd "M-<right>") 'windmove-right)
@@ -165,7 +170,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(Man-notify-method 'pushy)
-  '(erc-prompt-for-password nil)
+ '(erc-autojoin-channels-alist '((Libera.Chat "#emacs") ("irc.libera.chat")))
+ '(erc-prompt-for-password nil)
+ '(org-edit-src-content-indentation 0)
  '(package-selected-packages
    '(ace-window auto-virtualenv catppuccin-theme company corfu
 		counsel-projectile doom-themes easysession eat
