@@ -50,8 +50,7 @@
   (add-hook 'zig-mode-hook #'eglot-ensure)
   (add-hook 'cperl-mode-hook #'eglot-ensure)
   ;; Create a memorable alias for `eglot-ensure'.
-  (defalias 'start-lsp-server #'eglot)
-  )
+  (defalias 'start-lsp-server #'eglot))
 
 ;; Pop-up completion
 (use-package corfu
@@ -62,29 +61,36 @@
 	corfu-quit-no-match 'separator) ;; or t
   ;; Enable autocompletion by default in programming buffers
   (add-hook 'prog-mode-hook #'corfu-mode)
-  (add-hook 'org-mode-hook #'corfu-mode)
-  )
+  (add-hook 'org-mode-hook #'corfu-mode))
 
 ;; Git client
 (use-package magit
   :config
   ;; Bind the `magit-status' command to a convenient key.
-  (global-set-key (kbd "C-c g") #'magit-status)
-  )
+  (global-set-key (kbd "C-c g") #'magit-status))
 
 (use-package go-mode)
 (use-package json-mode)
 (use-package lua-mode)
 (use-package markdown-mode)
 (use-package zig-mode)
+(use-package cperl-mode
+  :config
+  (defalias 'perl-mode 'cperl-mode)
+; (setq cperl-close-paren-offset (- cperl-indent-level))
+  (setq cperl-indent-parens-as-block t))
 (use-package org
   :config
   (setq-default org-latex-compiler "pdflatex")
   (setq org-html-validation-link nil)
-;; export org to html
-(use-package htmlize)
-
-;; Org babel setting
+  (use-package org-superstar)
+  (add-hook 'org-mode-hook #'olivetti-mode)
+  (add-hook 'org-mode-hook #'org-superstar-mode)
+  (add-hook 'org-mode-hook #'org-indent-mode)
+  ;; export org to html
+  (use-package htmlize)
+  
+  ;; Org babel setting (src/code block)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((R . t)
@@ -95,27 +101,15 @@
      (shell . t)
      (python . t)
      (emacs-lisp t)))
-  (setq org-babel-python-command "python3") ;; otherwise fail using "python"
-  )
-(use-package org-superstar)
-(use-package org-modern)
-(add-hook 'org-mode-hook #'olivetti-mode)
-(add-hook 'org-mode-hook #'org-superstar-mode)
-(use-package cperl-mode
-  :config
-  (defalias 'perl-mode 'cperl-mode)
-  (setq cperl-indent-parens-as-block t)
-					;(setq cperl-close-paren-offset (- cperl-indent-level))
-  )
+  ;; otherwise fail using "python"
+  (setq org-babel-python-command "python3"))
 
 (use-package eat
   :config
   ;; Close the terminal buffer when the shell terminates.
   (setq eat-kill-buffer-on-exit t)
-
   ;; Enable mouse-support.
-  (setq eat-enable-mouse t)
-  )
+  (setq eat-enable-mouse t))
 
 ;;;;;;;;; other setup ;;;;;;;;;;;;;;
 
@@ -145,13 +139,16 @@
 (recentf-mode t)
 
 ;; ERC/IRC
-(setq erc-server "irc.libera.chat"
-      erc-nick "azz"
-      erc-user-full-name "azz"
-      erc-track-shorten-start 8
-      erc-autojoin-channels-alist '(("irc.libera.chat" "#dimsumlabs" "#emacs" "#guix" "#perl" "#zig"))
-      erc-kill-buffer-on-part t
-      erc-auto-query 'bury)
+(use-package erc
+  :config
+  (setq-default erc-server "irc.libera.chat")
+  (setq-default erc-nick "azv4l")
+  (setq-default erc-user-full-name "azv4l")
+  (setq-default erc-track-shorten-start 8)
+  (setq erc-hide-list '("JOIN" "PART" "QUIT"))
+  (setq-default erc-autojoin-channels-alist '(("irc.libera.chat" "#dimsumlabs" "#emacs" "#guix" "#perl")))
+  (setq-default erc-kill-buffer-on-part t)
+  (setq-default erc-auto-query 'bury))
 
 ;; smooth scrolling
 (setq scroll-conservatively 101)
@@ -168,13 +165,14 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(Man-notify-method 'pushy)
+  '(erc-prompt-for-password nil)
  '(package-selected-packages
    '(ace-window auto-virtualenv catppuccin-theme company corfu
 		counsel-projectile doom-themes easysession eat
 		flycheck go-mode htmlize json-mode lsp-python-ms
 		lua-mode magit nerd-fonts nerd-icons org-modern
 		org-superstar perl-doc pyvenv smex vertico zig-mode))
- '(tab-bar-mode nil)
+ '(tab-bar-mode 1)
  '(tab-bar-show 1))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
