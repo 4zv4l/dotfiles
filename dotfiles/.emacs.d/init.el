@@ -99,7 +99,8 @@
   )
 (use-package org-superstar)
 (use-package org-modern)
-;(add-hook 'org-mode-hook #'olivetti-mod)
+(add-hook 'org-mode-hook #'olivetti-mode)
+(add-hook 'org-mode-hook #'org-superstar-mode)
 (use-package cperl-mode
   :config
   (defalias 'perl-mode 'cperl-mode)
