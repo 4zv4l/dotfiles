@@ -122,6 +122,12 @@
   ;; Enable mouse-support.
   (setq eat-enable-mouse t))
 
+;; music player
+(use-package emms)
+(emms-all)
+(setq emms-player-list '(emms-player-mpv)
+      emms-info-functions '(emms-info-native))
+
 ;;;;;;;;; other setup ;;;;;;;;;;;;;;
 
 ;; homepage
@@ -204,7 +210,7 @@
  '(package-selected-packages
    '(ace-window auto-virtualenv catppuccin-theme company corfu
 		counsel-projectile diff-hl doom-themes easysession eat
-		flycheck go-mode htmlize json-mode lsp-python-ms
+		emms flycheck go-mode htmlize json-mode lsp-python-ms
 		lua-mode magit nerd-fonts nerd-icons org-html-themify
 		org-modern org-superstar perl-doc pyvenv smex vertico
 		zig-mode))
