@@ -88,6 +88,8 @@
   (custom-set-faces
    '(cperl-array-face ((t (:weight normal))))
    '(cperl-hash-face ((t (:weight normal))))))
+;; better for perl lsp
+(add-to-list 'eglot-server-programs '(perl-mode . ("pls")))
 (use-package org
   :config
   (setq-default org-latex-compiler "pdflatex")
@@ -204,16 +206,10 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(Man-notify-method 'pushy)
- '(erc-autojoin-channels-alist '((Libera.Chat "#emacs" "#perl") ("irc.libera.chat")))
+ '(erc-autojoin-channels-alist '((Libera.Chat "#emacs" "#perl") ("irc.libera.chat")) t)
  '(erc-prompt-for-password nil)
  '(org-edit-src-content-indentation 0)
- '(package-selected-packages
-   '(ace-window auto-virtualenv catppuccin-theme company corfu
-		counsel-projectile diff-hl doom-themes easysession eat
-		emms flycheck go-mode htmlize json-mode lsp-python-ms
-		lua-mode magit nerd-fonts nerd-icons org-html-themify
-		org-modern org-superstar perl-doc pyvenv smex vertico
-		zig-mode))
+ '(package-selected-packages nil)
  '(tab-bar-mode 1)
  '(tab-bar-show 1))
 (custom-set-faces
