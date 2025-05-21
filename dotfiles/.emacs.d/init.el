@@ -68,6 +68,12 @@
   :config
   ;; Bind the `magit-status' command to a convenient key.
   (global-set-key (kbd "C-c g") #'magit-status))
+;; auto refresh magit on buffer save
+(with-eval-after-load 'magit-mode
+  (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
+;; git mark on buffer (next to line number)
+(use-package diff-hl)
+(global-diff-hl-mode)
 
 (use-package go-mode)
 (use-package json-mode)
@@ -192,12 +198,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(Man-notify-method 'pushy)
- '(erc-autojoin-channels-alist '((Libera.Chat "#emacs") ("irc.libera.chat")))
+ '(erc-autojoin-channels-alist '((Libera.Chat "#emacs" "#perl") ("irc.libera.chat")))
  '(erc-prompt-for-password nil)
  '(org-edit-src-content-indentation 0)
  '(package-selected-packages
    '(ace-window auto-virtualenv catppuccin-theme company corfu
-		counsel-projectile doom-themes easysession eat
+		counsel-projectile diff-hl doom-themes easysession eat
 		flycheck go-mode htmlize json-mode lsp-python-ms
 		lua-mode magit nerd-fonts nerd-icons org-html-themify
 		org-modern org-superstar perl-doc pyvenv smex vertico
@@ -209,4 +215,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(cperl-array-face ((t (:weight normal))))
+ '(cperl-hash-face ((t (:weight normal)))))
