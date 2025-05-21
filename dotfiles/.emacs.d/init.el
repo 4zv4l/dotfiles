@@ -77,8 +77,11 @@
 (use-package cperl-mode
   :config
   (defalias 'perl-mode 'cperl-mode)
-; (setq cperl-close-paren-offset (- cperl-indent-level))
-  (setq cperl-indent-parens-as-block t))
+  (setq cperl-close-paren-offset (- cperl-indent-level))
+  (setq cperl-indent-parens-as-block t)
+  (custom-set-faces
+   '(cperl-array-face ((t (:weight normal))))
+   '(cperl-hash-face ((t (:weight normal))))))
 (use-package org
   :config
   (setq-default org-latex-compiler "pdflatex")
@@ -147,13 +150,19 @@
   (setq-default erc-nick "azv4l")
   (setq-default erc-user-full-name "azv4l")
   (setq-default erc-track-shorten-start 8)
-  (setq erc-hide-list '("JOIN" "PART" "QUIT"))
+  (setq erc-hide-list '("JOIN" "PART" "NICK" "QUIT"))
   (setq-default erc-autojoin-channels-alist '(("irc.libera.chat" "#dimsumlabs" "#emacs" "#guix" "#perl")))
   (setq-default erc-kill-buffer-on-part t)
-  (setq-default erc-auto-query 'bury))
+  (setq-default erc-auto-query 'bury)
+  (setq-default erc-fill-function 'erc-fill-wrap)
+  (setq-default erc-fill-static-center 18))
 
 ;; smooth scrolling
 (setq scroll-conservatively 101)
+
+;; remove window decoration and add transparency
+(add-to-list 'default-frame-alist '(undecorated . t))
+(add-to-list 'default-frame-alist '(alpha-background . 90))
 
 ;; update buffer on file change
 (global-auto-revert-mode)
@@ -163,6 +172,19 @@
 (global-set-key (kbd "M-<right>") 'windmove-right)
 (global-set-key (kbd "M-<up>")    'windmove-up)
 (global-set-key (kbd "M-<down>")  'windmove-down)
+
+;; custom functions
+(defun mosh-connect (host)
+  (interactive
+   (list
+    (completing-read
+     "mosh host: "
+     (flatten-tree
+      (remove '(nil nil) (remove nil (tramp-parse-sconfig "~/.ssh/config")))))))
+  (message "host is %s" host)
+  (defvar-local buffer-name (format "*%s*" host))
+  (switch-to-buffer (eat (format "mosh %s" host)))
+  (rename-buffer buffer-name))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -177,8 +199,9 @@
    '(ace-window auto-virtualenv catppuccin-theme company corfu
 		counsel-projectile doom-themes easysession eat
 		flycheck go-mode htmlize json-mode lsp-python-ms
-		lua-mode magit nerd-fonts nerd-icons org-modern
-		org-superstar perl-doc pyvenv smex vertico zig-mode))
+		lua-mode magit nerd-fonts nerd-icons org-html-themify
+		org-modern org-superstar perl-doc pyvenv smex vertico
+		zig-mode))
  '(tab-bar-mode 1)
  '(tab-bar-show 1))
 (custom-set-faces
