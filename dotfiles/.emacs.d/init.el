@@ -166,6 +166,8 @@
   (setq-default erc-track-shorten-start 8)
   (setq erc-hide-list '("JOIN" "PART" "NICK" "QUIT"))
   (setq-default erc-autojoin-channels-alist '(("irc.libera.chat" "#dimsumlabs" "#emacs" "#guix" "#perl")))
+  (setq-default erc-server-reconnect-attempts 5)
+  (setq-default erc-server-reconnect-timeout 3)
   (setq-default erc-kill-buffer-on-part t)
   (setq-default erc-auto-query 'bury)
   (setq-default erc-fill-function 'erc-fill-wrap)
