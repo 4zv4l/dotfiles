@@ -43,7 +43,11 @@
             "guile-lsp-server"
             "zig"
             "zig-zls"
+            "gcc-toolchain"
+            "pkg-config"
             "nushell"
+            "zstd"
+            "pigz"
             "zip"
             "unzip"
             "mtr"
@@ -57,9 +61,11 @@
       (service home-bash-service-type
         (home-bash-configuration
           (environment-variables
-            `(("PATH"   . ,%PATH)
-              ("PS1"    . "$(history -a;history -n)$PS1")
-              ("EDITOR" . "nvim")))
+            `(("PATH"           . ,%PATH)
+              ("PS1"            . "$(history -a;history -n)$PS1")
+              ("HISTSIZE"       . "-1")
+              ("HISTFILESIZE"   . "-1")
+              ("EDITOR"         . "nvim")))
           (aliases
             '(("cat" . "bat")
               ("ls"  . "lsd")
