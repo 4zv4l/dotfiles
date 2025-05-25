@@ -63,7 +63,9 @@
    (service home-fish-service-type
             (home-fish-configuration
              (environment-variables
-              `(("PATH"           . ,%PATH)             
+              `(("NFORTUNE_DATABASE" . "$HOME/.local/share/fortunes/")
+                ("PERL_MB_OPT" . "--install_base \"$HOME/perl5\"")
+                ("PERL_MM_OPT" . "INSTALL_BASE=$HOME/perl5")
                 ("EDITOR"         . "nvim")))
              (aliases
               '(("cat" . "bat")
@@ -72,29 +74,33 @@
              (config
               (list (plain-file "rc"
                                 (string-join
-                                 (list "eval (perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
-                                       "zoxide init fish | source"
-                                       "function fish_greeting; echo 'Hello sibl !';end")
-				       ;; "function fish_greeting; fortune | cowsay | lolcat;end")
-                                "\n"))))))
+                                 (list "zoxide init fish | source"
+                                       "fish_add_path -P -p ~/perl5/bin"
+                                       "fish_add_path -P -p ~/.local/bin"
+                                       "fish_add_path -P -p ~/.guix-profile/bin"
+                                       "fish_add_path -P -p ~/.guix-profile/sbin"
+                                       "fish_add_path -P -p ~/.config/guix/current/bin"
+                                       "function fish_greeting; nfortune | cowsay | lolcat;end")
+                                 "\n"))))))
    (service home-bash-service-type
-	    (home-bash-configuration
-	     (environment-variables
-	      `(("PATH"           . ,%PATH)
-		("PS1"            . "$(history -a;history -n)$PS1")
-		("HISTSIZE"       . "-1")
-		("HISTFILESIZE"   . "-1")
-		("EDITOR"         . "nvim")))
-	     (aliases
-	      '(("cat" . "bat")
-		("ls"  . "lsd")
-		("v"   . "nvim")))
-	     (bashrc
-	      (list (plain-file "rc"
-				(string-join
-				 (list "eval \"$(zoxide init bash)\""
-				       "eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)")
-				 "\n"))))))
+            (home-bash-configuration
+             (environment-variables
+              `(("PATH"           . ,%PATH)
+                ("PS1"            . "$(history -a;history -n)$PS1")
+                ("HISTSIZE"       . "-1")
+                ("HISTFILESIZE"   . "-1")
+                ("NFORTUNE_DATABASE" . "$HOME/.local/share/fortunes/")
+                ("EDITOR"         . "nvim")))
+             (aliases
+              '(("cat" . "bat")
+                ("ls"  . "lsd")
+                ("v"   . "nvim")))
+             (bashrc
+              (list (plain-file "rc"
+                                (string-join
+                                 (list "eval \"$(zoxide init bash)\""
+                                       "eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)")
+                                 "\n"))))))
    ;; copy dotfiles as symlinks
    (service home-dotfiles-service-type
             (home-dotfiles-configuration
