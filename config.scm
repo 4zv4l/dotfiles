@@ -31,8 +31,7 @@
 (home-environment
  (packages
   (specifications->packages
-   (list "fortunes-jkirchartz"
-         "cowsay"
+   (list "cowsay"
          "lolcat"
          "tmux"
          "zoxide"
