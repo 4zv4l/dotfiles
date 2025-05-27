@@ -202,6 +202,10 @@
   (switch-to-buffer (eat (format "mosh %s" host)))
   (rename-buffer buffer-name))
 
+;; tramp setup
+(setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
