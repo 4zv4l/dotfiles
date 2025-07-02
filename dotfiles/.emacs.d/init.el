@@ -48,6 +48,7 @@
   ;; Enable LSP support by default in programming buffers
   (add-hook 'prog-mode-hook #'eglot-ensure)
   (add-hook 'zig-mode-hook #'eglot-ensure)
+  (add-hook 'ruby-mode-hook #'eglot-ensure)
   (add-hook 'cperl-mode-hook #'eglot-ensure)
   ;; Create a memorable alias for `eglot-ensure'.
   (defalias 'start-lsp-server #'eglot))
@@ -88,8 +89,10 @@
   (custom-set-faces
    '(cperl-array-face ((t (:weight normal))))
    '(cperl-hash-face ((t (:weight normal))))))
+(use-package perl-doc)
 ;; better for perl lsp
 (add-to-list 'eglot-server-programs '(perl-mode . ("pls")))
+;;(add-to-list 'eglot-server-programs `(perl-mode . ("/usr/local/bin/perlnavigator", "--stdio")))
 (use-package org
   :config
   (setq-default org-latex-compiler "pdflatex")
@@ -127,8 +130,9 @@
 ;; music player
 (use-package emms)
 (emms-all)
-(setq emms-player-list '(emms-player-mpv)
-      emms-info-functions '(emms-info-native))
+(emms-default-players)
+(setq emms-player-list '(emms-player-vlc))
+;;      emms-info-functions '(emms-info-native))
 
 ;;;;;;;;; other setup ;;;;;;;;;;;;;;
 
@@ -136,13 +140,15 @@
 ;; (add-hook 'after-init-hook 'recentf-open-files)
 ;; (inhibit-startup-screen t)
 
-;; font setpu
-(set-frame-font "FiraCode Nerd Font 13" nil t)
+;; font setup
+;;(set-frame-font "FiraCode Nerd Font 13" nil t)
+(set-frame-font "Terminess Nerd Font 14" nil t)
 
 ;; hide toolbar
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (menu-bar-mode -1)
+(setq-default cursor-in-non-selected-windows nil)
 
 ;; Miscellaneous options
 (setq-default major-mode
@@ -161,8 +167,8 @@
 (use-package erc
   :config
   (setq-default erc-server "irc.libera.chat")
-  (setq-default erc-nick "azv4l")
-  (setq-default erc-user-full-name "azv4l")
+  (setq-default erc-nick "lexiz")
+  (setq-default erc-user-full-name "lexiz")
   (setq-default erc-track-shorten-start 8)
   (setq erc-hide-list '("JOIN" "PART" "NICK" "QUIT"))
   (setq-default erc-autojoin-channels-alist '(("irc.libera.chat" "#dimsumlabs" "#emacs" "#guix" "#perl")))
@@ -172,6 +178,9 @@
   (setq-default erc-auto-query 'bury)
   (setq-default erc-fill-function 'erc-fill-wrap)
   (setq-default erc-fill-static-center 18))
+
+;; GPG settings
+(setq epg-pinentry-mode 'loopback)
 
 ;; smooth scrolling
 (setq scroll-conservatively 101)
@@ -202,9 +211,16 @@
   (switch-to-buffer (eat (format "mosh %s" host)))
   (rename-buffer buffer-name))
 
-;; tramp setup
+;; auth TRAMP setup
 (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
-(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+(setq tramp-remote-path (list "/bin" "/usr/bin" "/sbin" "/usr/sbin"
+			      "/usr/local/bin" "/usr/local/sbin"
+			      "/local/bin" "/local/freeware/bin"
+			      "/local/gnu/bin" "/usr/freeware/bin"
+			      "/usr/pkg/bin" "/usr/contrib/bin"
+			      "/opt/bin" "/opt/sbin" "/opt/local/bin"
+			      "/opt/homebrew/bin" "/opt/homebrew/sbin"
+			      'tramp-own-remote-path))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -212,10 +228,16 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(Man-notify-method 'pushy)
- '(erc-autojoin-channels-alist '((Libera.Chat "#emacs" "#perl") ("irc.libera.chat")) t)
+ '(auth-source-save-behavior 'ask)
+ '(erc-autojoin-channels-alist '((Libera.Chat "#emacs") ("irc.libera.chat")))
  '(erc-prompt-for-password nil)
  '(org-edit-src-content-indentation 0)
- '(package-selected-packages nil)
+ '(package-selected-packages
+   '(auctex catppuccin-theme corfu diff-hl doom-modeline easysession eat
+	    emms exec-path-from-shell go-mode htmlize json-mode
+	    lua-mode magit markdown-mode mood-line nano-modeline
+	    nano-theme nim-mode olivetti org-modern org-superstar
+	    pyenv-mode rust-mode vertico zig-mode))
  '(tab-bar-mode 1)
  '(tab-bar-show 1))
 (custom-set-faces
