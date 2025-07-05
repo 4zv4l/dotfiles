@@ -176,7 +176,6 @@
   (setq-default erc-server-reconnect-timeout 3)
   (setq-default erc-kill-buffer-on-part t)
   (setq-default erc-auto-query 'bury)
-  (setq-default erc-fill-function 'erc-fill-wrap)
   (setq-default erc-fill-static-center 18))
 
 ;; GPG settings
@@ -221,6 +220,18 @@
 			      "/opt/bin" "/opt/sbin" "/opt/local/bin"
 			      "/opt/homebrew/bin" "/opt/homebrew/sbin"
 			      'tramp-own-remote-path))
+;; Configure Emacs to store autosave files in a specific local directory
+(setq auto-save-file-name-transforms
+      '((".*" "~/.emacs.d/auto-save/" t)))
+;; Optionally, also configure backup files
+(setq backup-directory-alist
+      '((".*" . "~/.emacs.d/backups/")))
+;; Create the directory if it doesn't exist (optional, Emacs usually creates it)
+(unless (file-exists-p "~/.emacs.d/auto-save/")
+  (make-directory "~/.emacs.d/auto-save/" t))
+;; For backup files too if you enabled them above
+(unless (file-exists-p "~/.emacs.d/backups/")
+  (make-directory "~/.emacs.d/backups/" t))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -229,7 +240,6 @@
  ;; If there is more than one, they won't work right.
  '(Man-notify-method 'pushy)
  '(auth-source-save-behavior 'ask)
- '(erc-autojoin-channels-alist '((Libera.Chat "#emacs") ("irc.libera.chat")))
  '(erc-prompt-for-password nil)
  '(org-edit-src-content-indentation 0)
  '(package-selected-packages
