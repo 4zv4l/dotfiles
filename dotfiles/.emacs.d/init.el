@@ -166,8 +166,10 @@
 ;; ERC/IRC
 (use-package erc
   :config
-  (setq-default erc-server "lexihk.dimsumlabs.com")
-  (setq-default erc-port 9988)
+  ;;(setq-default erc-server "lexihk.dimsumlabs.com")
+  ;;(setq-default erc-port 9988)
+  (setq-default erc-server "irc.libera.chat")
+  (setq-default erc-port 6697)
   (setq-default erc-nick "azval")
   (setq-default erc-user-full-name "azval")
   (setq-default erc-prompt-for-nickserv-password nil)
