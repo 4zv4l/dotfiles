@@ -166,12 +166,14 @@
 ;; ERC/IRC
 (use-package erc
   :config
-  (setq-default erc-server "irc.libera.chat")
-  (setq-default erc-nick "lexiz")
-  (setq-default erc-user-full-name "lexiz")
+  (setq-default erc-server "lexihk.dimsumlabs.com")
+  (setq-default erc-port 9988)
+  (setq-default erc-nick "azval")
+  (setq-default erc-user-full-name "azval")
+  (setq-default erc-prompt-for-nickserv-password nil)
   (setq-default erc-track-shorten-start 8)
   (setq erc-hide-list '("JOIN" "PART" "NICK" "QUIT"))
-  (setq-default erc-autojoin-channels-alist '(("irc.libera.chat" "#dimsumlabs" "#emacs" "#guix" "#perl")))
+  ;;(setq-default erc-autojoin-channels-alist '(("irc.libera.chat" "#dimsumlabs" "#emacs" "#guix" "#perl")))
   (setq-default erc-server-reconnect-attempts 5)
   (setq-default erc-server-reconnect-timeout 3)
   (setq-default erc-kill-buffer-on-part t)
