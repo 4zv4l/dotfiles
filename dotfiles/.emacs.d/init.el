@@ -172,6 +172,7 @@
   (setq-default erc-port 6697)
   (setq-default erc-nick "azval")
   (setq-default erc-user-full-name "azval")
+  (setq-default erc-use-auth-source-for-nickserv-password t)
   (setq-default erc-prompt-for-nickserv-password nil)
   (setq-default erc-track-shorten-start 8)
   (setq erc-hide-list '("JOIN" "PART" "NICK" "QUIT"))
