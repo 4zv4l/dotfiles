@@ -21,14 +21,14 @@
    "$HOME" (getenv "HOME")))
 
 (define %my-shepherd-services
-  (list ;; (shepherd-service
-        ;;  (documentation "Run Syncthing.")
-        ;;  (provision '(syncthing))
-        ;;  (start #~(make-forkexec-constructor
-        ;;            '("syncthing" "-no-browser")
-        ;;            #:log-file (string-append (getenv "HOME")
-        ;;                                      "/log/syncthing.log")))
-        ;;  (stop #~(make-kill-destructor)))
+  (list (shepherd-service
+         (documentation "Run Syncthing.")
+         (provision '(syncthing))
+         (start #~(make-forkexec-constructor
+                   '("syncthing" "-no-browser")
+                   #:log-file (string-append (getenv "HOME")
+                                             "/log/syncthing.log")))
+         (stop #~(make-kill-destructor)))
 
         (shepherd-service
          (documentation "Run the Emacs daemon")
@@ -68,6 +68,7 @@
         "mtr"
         "ltrace"
         "strace"
+        "make"
         "nmap")))
 
 (services
@@ -78,9 +79,10 @@
              `(("NFORTUNE_DATABASE" . "$HOME/.local/share/fortunes/")
                ("PERL_MB_OPT" . "--install_base \"$HOME/perl5\"")
                ("PERL_MM_OPT" . "INSTALL_BASE=$HOME/perl5")
-               ("LANG" . "C.UTF-8")
-               ("LANGUAGE" . "C.UTF-8")
-               ("LC_ALL" . "C.UTF-8")
+               ("LANG" . "en_US.UTF-8")
+               ("LANGUAGE" . "en_US.UTF-8")
+               ("LC_ALL" . "en_US.UTF-8")
+               ("XDG_DATA_DIRS" . "$XDG_DATA_DIRS:/home/sibl/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share")
                ("EDITOR"         . "nvim")))
             (aliases
              '(("cat" . "bat")
@@ -102,6 +104,8 @@
                                       "fish_add_path -P -p /run/setuid-programs"
                                       "fish_add_path -P -p ~/.local/bin"
                                       "zoxide init fish | source"
+                                      "export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)"
+                                      "gpgconf --launch gpg-agent"
                                       "function fish_greeting; FORTUNE_PATH=~/.local/share/fortunes zfortune | cowsay -f small | lolcat;end")
                                 "\n"))))))
   (service home-bash-service-type
@@ -148,6 +152,13 @@
           (authorized-keys (list
                              (plain-file "lexipine.pub" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHuFK16nVWpdxlZlGWoHwCMDLUtbP9uvJwpi7/Comx9j sibl@sibl")
                              (plain-file "gpg_ssh.pub" "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDLhOSwuzj0J74VPkb90Suky1roeMcj7Dt3J6Q9sU22GrWXPDCSIqKSzoXrYcNenRTKvJgw0qRIgTMWUUOCtBoXf8Q1AmbE/fzMa2EDQLtmylaOcOk7a6BhJmN2QjfwkDxb2t6BZSM7G1eOl2iOtWWY3F5QxbGU4locZYjeF16xOG+FOyDuvJldsJsAx/5lUcQvZfuwVACIpqxkto8Qab7qWLb4Qzj81fYtoGrTfdl5FuwAkVFsMlDLHSQzPmOrSMc4lRdcqyn5AqMl/hpzTKXP+1pqHOab5tykAO28//hG7I0n7JBC9J53CPrHFyUYLJznJQ4zIj3QjH4LvrCLVgaKI6rziuhurFFPDG47hchIXXysb4XWElMVD+nVu9y92nM9s6/Np47nsS1yn3jVmE2WLinGMk9z7sme4C05lepVW5sW77dG+hlv0OC4p0MPH1WN27LVwnYLWXQp0kElURMpBi4516RYNrQJ3hrdDlBXJj+pfocbTj5HvMqQph3S3OIazAqZ03dzlpzSwjVEU0eASjz6s/V0IvzMUEsJ+yHyCpimxUm1zRQ1hh6REnTCDLK4YPug/M9LHxK3aOzTFDNwZA1ot+NHjfiDmA26Myhrl74GjjRqT0AxLJ22kozVILtuf/0Ez6PpozzA4JLES7GZ9BngLPqWeAxrvuMLMJC5rw== openpgp:0x99DB3DBD")))))
+  ;; flatpak setup
+  (simple-service 'flatpak-service
+                      home-shell-profile-service-type
+                      (list (local-file
+                              (string-append (getenv "HOME") "/.guix-profile/etc/profile.d/flatpak.sh")
+                              "flatpak.sh")))
+
   ;; copy dotfiles as symlinks
   (service home-dotfiles-service-type
            (home-dotfiles-configuration
