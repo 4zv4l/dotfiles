@@ -5,6 +5,9 @@
 	("org" . "https://orgmode.org/elpa/")
 	("elpa" . "https://elpa.gnu.org/packages/")))
 
+(add-to-list 'load-path "/home/sibl/.guix-profile/share/emacs/site-lisp")
+(guix-emacs-autoload-packages)
+
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
@@ -100,7 +103,7 @@
   ; avoid indent in src block
   ; (setq-default org-edit-src-content-indentation 0)
   (use-package org-superstar)
-  (add-hook 'org-mode-hook #'olivetti-mode)
+  ;(add-hook 'org-mode-hook #'olivetti-mode)
   (add-hook 'org-mode-hook #'org-superstar-mode)
   (add-hook 'org-mode-hook #'org-indent-mode)
   ;; export org to html
@@ -116,11 +119,14 @@
      (lua . t)
      (shell . t)
      (python . t)
+     (scheme . t)
+     (sqlite . t)
      (emacs-lisp t)))
   ;; otherwise fail using "python"
   (setq org-babel-python-command "python3"))
 
 (use-package eat
+  :load-path "/home/sibl/Documents/git/emacs-eat"
   :config
   ;; Close the terminal buffer when the shell terminates.
   (setq eat-kill-buffer-on-exit t)
@@ -134,15 +140,19 @@
 (setq emms-player-list '(emms-player-vlc))
 ;;      emms-info-functions '(emms-info-native))
 
+;; Guix
+(use-package guix)
+
 ;;;;;;;;; other setup ;;;;;;;;;;;;;;
 
 ;; homepage
-;; (add-hook 'after-init-hook 'recentf-open-files)
-;; (inhibit-startup-screen t)
+;;(add-hook 'after-init-hook 'recentf-open-files)
+;;(inhibit-startup-screen t)
 
 ;; font setup
 ;;(set-frame-font "FiraCode Nerd Font 13" nil t)
-(set-frame-font "Terminess Nerd Font 14" nil t)
+;;(set-frame-font "Terminess Nerd Font 14" nil t)
+(setq default-frame-alist '((font . "Terminess Nerd Font 14")))
 
 ;; hide toolbar
 (tool-bar-mode -1)
@@ -192,15 +202,26 @@
 ;; remove window decoration and add transparency
 (add-to-list 'default-frame-alist '(undecorated . t))
 (add-to-list 'default-frame-alist '(alpha-background . 90))
+;; set terminal trensparent
+(set-face-background 'default "unspecified-bg")
+(set-face-background 'line-number "unspecified-bg")
 
 ;; update buffer on file change
 (global-auto-revert-mode)
 
 ;; bindings
+(define-key org-mode-map (kbd "<M-left>") nil)
+(define-key org-mode-map (kbd "<M-right>") nil)
+(define-key org-mode-map (kbd "<M-up>") nil)
+(define-key org-mode-map (kbd "<M-down>") nil)
 (global-set-key (kbd "M-<left>")  'windmove-left)
 (global-set-key (kbd "M-<right>") 'windmove-right)
 (global-set-key (kbd "M-<up>")    'windmove-up)
 (global-set-key (kbd "M-<down>")  'windmove-down)
+(define-key org-mode-map (kbd "M-S-<left>")  'org-metaleft)
+(define-key org-mode-map (kbd "M-S-<right>") 'org-metaright)
+(define-key org-mode-map (kbd "M-S-<up>")    'org-metaup)
+(define-key org-mode-map (kbd "M-S-<down>")  'org-metadown)
 
 ;; custom functions
 (defun mosh-connect (host)
