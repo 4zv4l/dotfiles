@@ -1,4 +1,4 @@
-(define-module (mangowc)
+(define-module (packages mangowc)
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix git-download)

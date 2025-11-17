@@ -6,6 +6,7 @@
   #:use-module (gnu services mcron)
   #:use-module (gnu services security-token)
   #:use-module (gnu services virtualization)
+  #:use-module (gnu services xorg)
   #:use-module (gnu system)
   #:use-module (gnu system accounts)
   #:use-module (systems base-desktop)
@@ -14,6 +15,7 @@
 (operating-system
  (inherit base-desktop)
  (host-name "lexipad")
+ (keyboard-layout (keyboard-layout "us"))
 
  (users (cons* (user-account
                 (name "sibl")
@@ -30,7 +32,7 @@
  ;; services, run 'guix system search KEYWORD' in a terminal.
  (services
   (append (list 
-                                        ; Yubikey
+           ; Yubikey
            (udev-rules-service 'fido2 libfido2 #:groups '("plugdev"))
            (service pcscd-service-type)
 
@@ -54,7 +56,7 @@
                                '(next-hour '(9 10 11 12 15 16 17 18 22)) ;; will try multi times a day
                                ;;              target tag   keep time between snap (24h)
                                "/home/sibl/.local/bin/btrfs-snp /home  home_daily 3    86400 /.snapshots"
-                               "take a btrfs snapshot of /home everyday, keeps 3 days."))))
+                               "take a btrfs snapshot of /home everyday, keeps 3 days.")))
 
           ;; used by gdm
           (set-xorg-configuration
