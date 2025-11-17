@@ -275,12 +275,12 @@ plugins {
 // Default: default
 //
 // theme "default"
-theme "catppuccin-mocha"
+theme "catppuccin-macchiato"
 
 // The name of the default layout to load on startup
 // Default: "default"
 //
-layout_dir "$HOME/.config/zellij"
+layout_dir "/home/sibl/.config/zellij"
 default_layout "my-layout"
 
 // Choose the mode that zellij uses when starting up.
@@ -296,6 +296,7 @@ default_layout "my-layout"
 //   - false
 //
 mouse_mode true
+advanced_mouse_actions false
 
 // Configure the scroll back buffer size
 // This is the number of lines zellij stores for each pane in the scroll back
@@ -354,3 +355,4 @@ mouse_mode true
 // Default: true
 //
 // styled_underlines false
+show_startup_tips false

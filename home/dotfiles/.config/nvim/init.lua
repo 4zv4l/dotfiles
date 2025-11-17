@@ -7,7 +7,7 @@ vim.opt.termguicolors = true
 vim.opt.number = true               -- show absolute number
 
 -- set shell to use
-vim.opt.shell = "/bin/zsh"
+vim.opt.shell = "/usr/bin/env bash"
 
 -- all 4 spaces
 vim.opt.tabstop = 4                 -- number of visual spaces per TAB

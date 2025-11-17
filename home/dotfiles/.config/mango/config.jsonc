@@ -1,0 +1,99 @@
+{
+  "modules-left": [
+    "ext/workspaces",
+    "custom/sep",
+    "dwl/window#layout",
+    "custom/sep",
+    "dwl/window#title"
+  ],
+  "modules-right": [
+    "custom/sep",
+    "battery",
+    "custom/sep",
+    "pulseaudio",
+    "custom/sep",
+    "network",
+    "custom/sep",
+    "cpu",
+    "custom/sep",
+    "memory",
+    "custom/sep",
+    "disk",
+    "custom/sep",
+    "clock",
+    "custom/sep",
+    "tray"
+  ],
+
+  "clock": {
+      "format": "{:%Y-%m-%d %H:%M}",
+      "locale": "en_IE.UTF-8",
+      "tooltip-format": "<tt><small>{calendar}</small></tt>",
+      "calendar": {
+          "mode"          : "year",
+          "mode-mon-col"  : 3,
+          "weeks-pos"     : "right",
+          "on-scroll"     : 1,
+          "format": {
+              "months":     "<span color='#ffead3'><b>{}</b></span>",
+              "days":       "<span color='#ecc6d9'><b>{}</b></span>",
+              "weeks":      "<span color='#99ffdd'><b>W{}</b></span>",
+              "weekdays":   "<span color='#ffcc66'><b>{}</b></span>",
+              "today":      "<span color='#ff6699'><b><u>{}</u></b></span>"
+          }
+      }
+  },
+  "cpu": {
+      "format": "CPU: {usage}%",
+      "tooltip": false
+  },
+  "memory": {
+      "format": "Mem: {used}GiB"
+  },
+  "disk": {
+      "interval": 60,
+      "path": "/",
+      "format": "Disk: {free}"
+  },
+  "battery": {
+      "states": {
+          "good": 95,
+          "warning": 30,
+          "critical": 15
+      },
+      "format": "Bat: {capacity}%",
+      "format-plugged": "Plug: {capacity}%",
+      "format-alt": "Bat: {capacity}% {time}",
+      "format-time": "{H}:{M}"
+  },
+  "pulseaudio": {
+      "format": "Vol: {volume}%",
+      "format-bluetooth": "Vol: {volume}% {icon}",
+      "format-muted": "-%",
+      "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+  },
+  "network": {
+      "format": "{ipaddr}/{cidr}",
+      "tooltip-format": "{ifname}",
+      "format-disconnected": "Offline"
+  },
+  "ext/workspaces": {
+      "format": "{icon}",
+      "ignore-hidden": false,
+      "on-click": "activate",
+      "sort-by-id": true
+  },
+  "dwl/tags": {
+      "num-tags": 9
+  },
+  "dwl/window#layout": {
+      "format": "[{layout}]"
+  },
+  "dwl/window#title": {
+      "format": "{title}"
+  },
+  "custom/sep": {
+      "format": "|",
+      "interval": 0
+  }
+}

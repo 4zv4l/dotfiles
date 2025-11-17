@@ -79,6 +79,21 @@
 (use-package diff-hl)
 (global-diff-hl-mode)
 
+;; c-mode setup
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (setq c-default-style "linux")
+            (setq c-basic-offset 8)
+            (setq indent-tabs-mode t)
+            (setq tab-width 8)
+            (eglot-ensure)))
+(add-hook 'c-mode-common-hook (lambda () (electric-indent-local-mode -1)))
+;; use spaces instead of tabs
+;;(use-package cc-mode)
+;;(setq-default indent-tabs-mode nil)
+;;(add-hook 'c-mode-common-hook '(lambda () (c-toggle-auto-state 1)))
+;;(setq c-default-style "linux"
+;;      c-basic-offset 4)
 (use-package go-mode)
 (use-package json-mode)
 (use-package lua-mode)
@@ -143,6 +158,9 @@
 ;; Guix
 (use-package guix)
 
+;; dired
+(setq dired-kill-when-opening-new-dired-buffer t)
+
 ;;;;;;;;; other setup ;;;;;;;;;;;;;;
 
 ;; homepage
@@ -202,9 +220,13 @@
 ;; remove window decoration and add transparency
 (add-to-list 'default-frame-alist '(undecorated . t))
 (add-to-list 'default-frame-alist '(alpha-background . 90))
-;; set terminal trensparent
-(set-face-background 'default "unspecified-bg")
-(set-face-background 'line-number "unspecified-bg")
+;; set terminal transparent
+(defun term-transparent-frame ()
+  (unless window-system
+    (progn
+      (set-face-background 'default "unspecified-bg")
+      (set-face-background 'line-number "unspecified-bg"))))
+(add-hook 'tty-setup-hook 'term-transparent-frame)
 
 ;; update buffer on file change
 (global-auto-revert-mode)
