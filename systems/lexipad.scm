@@ -52,11 +52,13 @@
            (simple-service 'crons
                            mcron-service-type
                            (list
+                            ;; take snapshot of home (almost every hour)
+                            ;; keep 25 snapshots, take snap every 3h
                             #~(job
-                               '(next-hour '(9 10 11 12 15 16 17 18 22)) ;; will try multi times a day
-                               ;;              target tag   keep time between snap (24h)
-                               "/home/sibl/.local/bin/btrfs-snp /home  home_daily 3    86400 /.snapshots"
-                               "take a btrfs snapshot of /home everyday, keeps 3 days.")))
+                               '(next-hour '(7 8 9 10 11 12 14 15 16 17 18 19 20 21 22 23))
+                               ;;                               target tag        keep time between snap destination
+                               "/home/sibl/.local/bin/btrfs-snp /home  home_daily 25   10800             /.snapshots"
+                               "take a btrfs snapshot of /home everyday.")))
 
           ;; used by gdm
           (set-xorg-configuration

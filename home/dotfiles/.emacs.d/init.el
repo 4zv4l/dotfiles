@@ -55,6 +55,7 @@
   (add-hook 'cperl-mode-hook #'eglot-ensure)
   ;; Create a memorable alias for `eglot-ensure'.
   (defalias 'start-lsp-server #'eglot))
+(setq eglot-autoshutdown 1)
 
 ;; Pop-up completion
 (use-package corfu
@@ -221,11 +222,11 @@
 (add-to-list 'default-frame-alist '(undecorated . t))
 (add-to-list 'default-frame-alist '(alpha-background . 90))
 ;; set terminal transparent
-(defun term-transparent-frame ()
-  (unless window-system
-    (progn
-      (set-face-background 'default "unspecified-bg")
-      (set-face-background 'line-number "unspecified-bg"))))
+;;(defun term-transparent-frame ()
+;;  (unless window-system
+;;    (progn
+;;      (set-face-background 'default "unspecified-bg")
+;;      (set-face-background 'line-number "unspecified-bg"))))
 (add-hook 'tty-setup-hook 'term-transparent-frame)
 
 ;; update buffer on file change
