@@ -22,7 +22,7 @@
          (branch "main")
          (introduction
           (make-channel-introduction
-           "b4b9d2fa01b78bbdb4314008424dc01dda1de20a"
+           "749146d77482a79c5cbfc8c6786f8edc670fa2af"
            (openpgp-fingerprint
             "F656 64BF 2D60 DA21 095F  CA50 7FD2 BABC CDDE 5BF1"))))
         (channel
@@ -54,15 +54,7 @@
                   (cups-configuration
                    (web-interface? #t)
                    (extensions
-                    (list cups-filters epson-inkjet-printer-escpr hplip-minimal brlaser))))
-
-         (service openssh-service-type
-                  (openssh-configuration
-                   (port-number 2200)
-                   (permit-root-login #f)
-                   (x11-forwarding? #t)
-                   (password-authentication? #f)
-                   (public-key-authentication? #t))))
+                    (list cups-filters epson-inkjet-printer-escpr hplip-minimal brlaser)))))
 
    (modify-services %desktop-services
                     (guix-service-type
@@ -70,9 +62,6 @@
                                 (inherit config)
                                 (channels %my-channels)
                                 (guix (guix-for-channels %my-channels))
-                                        ;(substitute-urls
-                                        ;  (append (list "https://nonguix-proxy.ditigal.xyz")
-                                        ;          %default-substitute-urls))
                                 (authorized-keys
                                  (append (list (local-file "./nonguix-signing-key.pub"))
                                          %default-authorized-guix-keys)))))))
@@ -109,4 +98,3 @@
       (device "/dev/vda1")
       (type "ext4"))
      %base-file-systems))))
-

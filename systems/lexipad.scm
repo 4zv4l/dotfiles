@@ -7,6 +7,7 @@
   #:use-module (gnu services security-token)
   #:use-module (gnu services virtualization)
   #:use-module (gnu services xorg)
+  #:use-module (gnu services ssh)
   #:use-module (gnu system)
   #:use-module (gnu system accounts)
   #:use-module (systems base-desktop)
@@ -28,8 +29,6 @@
 
  (packages (append lexipad-packages %base-packages))
 
- ;; Below is the list of system services.  To search for available
- ;; services, run 'guix system search KEYWORD' in a terminal.
  (services
   (append (list 
            ; Yubikey
@@ -49,16 +48,27 @@
            (service virtlog-service-type
                     (virtlog-configuration))
 
+           (service openssh-service-type
+                    (openssh-configuration
+                      (port-number 2200)
+                      (permit-root-login #f)
+                      (x11-forwarding? #t)
+                      (password-authentication? #f)
+                      (public-key-authentication? #t)))
+
            (simple-service 'crons
                            mcron-service-type
                            (list
-                            ;; take snapshot of home (almost every hour)
-                            ;; keep 25 snapshots, take snap every 3h
                             #~(job
-                               '(next-hour '(7 8 9 10 11 12 14 15 16 17 18 19 20 21 22 23))
+                               '(next-minute (range 0 60 15))
+                               ;;                               target tag         keep time between snap destination
+                               "/home/sibl/.local/bin/btrfs-snp /home  home_quick  15   900             /.snapshots"
+                               "take a btrfs snapshot of /home every 15 minutes, keeps 15 (up to 3h45 in the past).")
+                            #~(job
+                               '(next-hour (range 0 24 3))
                                ;;                               target tag        keep time between snap destination
                                "/home/sibl/.local/bin/btrfs-snp /home  home_daily 25   10800             /.snapshots"
-                               "take a btrfs snapshot of /home everyday.")))
+                               "take a btrfs snapshot of /home every 3 hours, keeps 25 (up to 75h in the past)")))
 
           ;; used by gdm
           (set-xorg-configuration

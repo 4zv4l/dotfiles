@@ -14,7 +14,6 @@
     "tree"
     "vim"
     ;; utils
-    "7zip"
     "btop"
     "file"
     "htop"
