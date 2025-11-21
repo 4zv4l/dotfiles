@@ -62,6 +62,9 @@
                                 (inherit config)
                                 (channels %my-channels)
                                 (guix (guix-for-channels %my-channels))
+                                (substitute-urls
+                                 (append (list "https://nonguix-proxy.ditigal.xyz" "https://substitutes.nonguix.org")
+                                         %default-substitute-urls))
                                 (authorized-keys
                                  (append (list (local-file "./nonguix-signing-key.pub"))
                                          %default-authorized-guix-keys)))))))
