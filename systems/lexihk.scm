@@ -10,20 +10,14 @@
   #:use-module (gnu services ssh)
   #:use-module (gnu system)
   #:use-module (gnu system accounts)
-  #:use-module (systems base-desktop))
+  #:use-module (systems base-server))
 
 (operating-system
- (inherit base-desktop)
+ (inherit base-server)
  (host-name "lexidoo")
  (keyboard-layout (keyboard-layout "us"))
 
  (users (cons* (user-account
-                (name "ande")
-                (comment "Ande")
-                (group "users")
-                (home-directory "/home/ande")
-                (supplementary-groups '("netdev" "audio" "video")))
-               (user-account
                 (name "sibl")
                 (comment "Simon")
                 (group "users")
@@ -34,7 +28,6 @@
 
  (packages (append (list
                     (specification->package "vim")
-                    (specification->package "emacs")
                     (specification->package "mg")
                     (specification->package "pigz")
                     (specification->package "zip")
@@ -42,9 +35,7 @@
                     (specification->package "nmap")
                     (specification->package "mtr")
                     (specification->package "htop")
-                    (specification->package "guile")
                     (specification->package "perl")
-                    (specification->package "zig")
                     (specification->package "mosh")
                     (specification->package "ncurses")
                     (specification->package "git")
@@ -57,11 +48,9 @@
             (service rootless-podman-service-type
 			 (rootless-podman-configuration
 			  (subgids
-			   (list (subid-range (name "ande"))
-				     (subid-range (name "sibl"))))
+			   (list (subid-range (name "sibl"))))
 			  (subuids
-			   (list (subid-range (name "ande"))
-				     (subid-range (name "sibl"))))))
+			   (list (subid-range (name "sibl"))))))
 
                 (service openssh-service-type
                          (openssh-configuration
@@ -71,13 +60,9 @@
                            (password-authentication? #f)
                            (public-key-authentication? #t)
                            (authorized-keys
-                             `(("sibl" ,(plain-file "lexidoo_ssh" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB8ue6dlphwDYWqNJhjmX9FzbvDjw+IGZd+hAlcBSAMs sibl@sibl"))
-                               ("ande" ,(plain-file "lexidoo_ssh" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIUDDToHCKFCuj5JdknEdq+HI/J/Kk3ZivLXXqn5rSCr ande@odoo.com"))))))
+                             `(("sibl" ,(plain-file "lexidoo_ssh" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB8ue6dlphwDYWqNJhjmX9FzbvDjw+IGZd+hAlcBSAMs sibl@sibl")))))))
 
-                (set-xorg-configuration
-                  (xorg-configuration (keyboard-layout keyboard-layout))))
-
-          %my-base-desktop-services))
+          %my-base-services))
 
  (bootloader (bootloader-configuration
                (bootloader grub-efi-bootloader)
@@ -96,6 +81,6 @@
                       (file-system
                         (mount-point "/")
                         (device "/dev/mapper/cryptroot")
-                        (type "ext4")
+                        (type "btrfs")
                         (dependencies mapped-devices))
                       %base-file-systems)))

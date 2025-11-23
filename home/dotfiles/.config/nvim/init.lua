@@ -9,6 +9,9 @@ vim.opt.number = true               -- show absolute number
 -- set shell to use
 vim.opt.shell = "/usr/bin/env bash"
 
+-- disable mouse
+vim.opt.mouse = ""
+
 -- all 4 spaces
 vim.opt.tabstop = 4                 -- number of visual spaces per TAB
 vim.opt.softtabstop = 4             -- number of spaces in tab when editing
