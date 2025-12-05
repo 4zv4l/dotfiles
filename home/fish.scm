@@ -25,6 +25,7 @@
                ("tb" . "ncat termbin.com 9999")
                ("praku" . "podman run --name raku -ti --sig-proxy=true --network=host --rm -v \"$(pwd):/script\" -w /script rakudo-star raku")
                ("6d" . "RAKUDOC=~/Documents/git/doc rakudoc -D")
+               ("simplex" . "guix shell -C -F -N --share=/home/sibl/.simplex zlib openssl gmp -- ~/.local/bin/simplex -s smp://WCTnRSS3L3aCjLzaA0bin9XxLQkWhLECUQGxJ_kr5h0=:superfoobar@lexihk.dimsumlabs.com")
                ("v"   . "nvim")))
             (config
              (list (plain-file "rc"
@@ -48,5 +49,13 @@
                                       "zoxide init fish | source"
                                       "export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)"
                                       "gpgconf --launch gpg-agent"
-                                      "function fish_greeting; FORTUNE_PATH=~/.local/share/fortunes zfortune | cowsay -f small | lolcat;end")
+                                      "function fish_greeting; FORTUNE_PATH=~/.local/share/fortunes zfortune | cowsay -f small | lolcat;end"
+                                      "function fish_prompt
+    set -l last_pipestatus $pipestatus
+    set -lx __fish_last_status $status # Export for __fish_print_pipestatus.
+    set -l prompt_status (__fish_print_pipestatus '[' ']' '|' (set_color red) (set_color red) $last_pipestatus)
+    echo -s (set_color purple)'# '(set_color blue)$USER(set_color normal)' @ '(set_color green)$hostname(set_color normal)' in '(set_color yellow)(prompt_pwd --full-length-dirs 2)(set_color normal) (fish_vcs_prompt) ' ' $prompt_status
+    echo -n (set_color red)'$ '(set_color normal)
+end"
+                                    "fish_config theme choose None")
                                 "\n")))))))

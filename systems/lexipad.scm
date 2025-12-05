@@ -56,19 +56,19 @@
                       (password-authentication? #f)
                       (public-key-authentication? #t)))
 
-           (simple-service 'crons
-                           mcron-service-type
-                           (list
-                            #~(job
-                               '(next-minute (range 0 60 15))
-                               ;;                               target tag         keep time between snap destination
-                               "/home/sibl/.local/bin/btrfs-snp /home  home_quick  15   900             /.snapshots"
-                               "take a btrfs snapshot of /home every 15 minutes, keeps 15 (up to 3h45 in the past).")
-                            #~(job
-                               '(next-hour (range 0 24 3))
-                               ;;                               target tag        keep time between snap destination
-                               "/home/sibl/.local/bin/btrfs-snp /home  home_daily 25   10800             /.snapshots"
-                               "take a btrfs snapshot of /home every 3 hours, keeps 25 (up to 75h in the past)")))
+           ;;(simple-service 'crons
+           ;;                mcron-service-type
+           ;;                (list
+           ;;                 #~(job
+           ;;                    '(next-minute (range 0 60 15))
+           ;;                    ;;                               target tag         keep time between snap destination
+           ;;                    "/home/sibl/.local/bin/btrfs-snp /home  home_quick  10   1800             /.snapshots"
+           ;;                    "take a btrfs snapshot of /home every 30 minutes, keeps 10 (up to 5h in the past).")
+           ;;                 #~(job
+           ;;                    '(next-hour (range 0 24 3))
+           ;;                    ;;                               target tag        keep time between snap destination
+           ;;                    "/home/sibl/.local/bin/btrfs-snp /home  home_daily 25   10800             /.snapshots"
+           ;;                    "take a btrfs snapshot of /home every 3 hours, keeps 25 (up to 75h in the past)")))
 
           ;; used by gdm
           (set-xorg-configuration

@@ -37,6 +37,6 @@
    (service home-shepherd-service-type
             (home-shepherd-configuration
              (services 
-              (list odoo-filebrowser-service odoo-jellyfin-service emacs-service))))
+              (list syncthing-service emacs-service))))
 
    %base-home-services)))

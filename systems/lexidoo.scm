@@ -71,7 +71,7 @@
                            (password-authentication? #f)
                            (public-key-authentication? #t)
                            (authorized-keys
-                             `(("sibl" ,(plain-file "lexidoo_ssh" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB8ue6dlphwDYWqNJhjmX9FzbvDjw+IGZd+hAlcBSAMs sibl@sibl"))
+                             `(("sibl" ,(plain-file "lexidoo_ssh" "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDLhOSwuzj0J74VPkb90Suky1roeMcj7Dt3J6Q9sU22GrWXPDCSIqKSzoXrYcNenRTKvJgw0qRIgTMWUUOCtBoXf8Q1AmbE/fzMa2EDQLtmylaOcOk7a6BhJmN2QjfwkDxb2t6BZSM7G1eOl2iOtWWY3F5QxbGU4locZYjeF16xOG+FOyDuvJldsJsAx/5lUcQvZfuwVACIpqxkto8Qab7qWLb4Qzj81fYtoGrTfdl5FuwAkVFsMlDLHSQzPmOrSMc4lRdcqyn5AqMl/hpzTKXP+1pqHOab5tykAO28//hG7I0n7JBC9J53CPrHFyUYLJznJQ4zIj3QjH4LvrCLVgaKI6rziuhurFFPDG47hchIXXysb4XWElMVD+nVu9y92nM9s6/Np47nsS1yn3jVmE2WLinGMk9z7sme4C05lepVW5sW77dG+hlv0OC4p0MPH1WN27LVwnYLWXQp0kElURMpBi4516RYNrQJ3hrdDlBXJj+pfocbTj5HvMqQph3S3OIazAqZ03dzlpzSwjVEU0eASjz6s/V0IvzMUEsJ+yHyCpimxUm1zRQ1hh6REnTCDLK4YPug/M9LHxK3aOzTFDNwZA1ot+NHjfiDmA26Myhrl74GjjRqT0AxLJ22kozVILtuf/0Ez6PpozzA4JLES7GZ9BngLPqWeAxrvuMLMJC5rw== sibl@sibl"))
                                ("ande" ,(plain-file "lexidoo_ssh" "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIUDDToHCKFCuj5JdknEdq+HI/J/Kk3ZivLXXqn5rSCr ande@odoo.com"))))))
 
                 (set-xorg-configuration

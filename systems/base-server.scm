@@ -1,4 +1,4 @@
-(define-module (systems base-desktop)
+(define-module (systems base-server)
   #:use-module (gnu)
   #:use-module (gnu bootloader grub)
   #:use-module (gnu packages package-management)
@@ -45,7 +45,7 @@
 
 (define %my-base-services
   (append
-   (list (service iptables-service-type)
+   (list (service iptables-service-type))
 
    (modify-services %base-services
                     (guix-service-type

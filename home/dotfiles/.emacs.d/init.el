@@ -1,253 +1,263 @@
-;; package setup
+;;; init.el --- Cleaned Emacs Config -*- lexical-binding: t -*-
+
+;;; 1. PACKAGE MANAGER SETUP
 (require 'package)
 (setq package-archives
       '(("melpa" . "https://melpa.org/packages/")
-	("org" . "https://orgmode.org/elpa/")
-	("elpa" . "https://elpa.gnu.org/packages/")))
+        ("org"   . "https://orgmode.org/elpa/")
+        ("elpa"  . "https://elpa.gnu.org/packages/")))
 
+;; Guix integration
 (add-to-list 'load-path "/home/sibl/.guix-profile/share/emacs/site-lisp")
-(guix-emacs-autoload-packages)
+(when (fboundp 'guix-emacs-autoload-packages)
+  (guix-emacs-autoload-packages))
 
 (package-initialize)
 (unless package-archive-contents
   (package-refresh-contents))
 
-;; Initialize use-package on non-linux platforms
+;; Bootstrap use-package
 (unless (package-installed-p 'use-package)
-  (package-refresh-contents)
   (package-install 'use-package))
-
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;; theme
-(use-package catppuccin-theme)
-(load-theme 'catppuccin :no-confirm)
+;;; 2. CORE EMACS SETTINGS
+(use-package emacs
+  :init
+  ;; UI cleanup
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (menu-bar-mode -1)
+  (setq inhibit-startup-screen t
+        use-dialog-box nil
+        ring-bell-function 'ignore)
+  
+  ;; Font (Fallback if daemon/client setup differs)
+  (add-to-list 'default-frame-alist '(font . "Terminess Nerd Font 14"))
+  (add-to-list 'default-frame-alist '(undecorated . t))
+  (add-to-list 'default-frame-alist '(alpha-background . 90))
+
+  ;; Scrolling
+  (setq scroll-conservatively 101
+        scroll-margin 0)
+
+  ;; File handling & Backups (Keep main dir clean)
+  (setq make-backup-files t
+        backup-directory-alist '((".*" . "~/.emacs.d/backups/"))
+        auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save/" t))
+        create-lockfiles nil)
+  (save-place-mode t)
+  (savehist-mode t)
+  (recentf-mode t)
+  (global-auto-revert-mode t)
+
+  ;; Auth sources
+  (setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc")
+        epg-pinentry-mode 'loopback)
+
+  ;; Interaction
+  (setq confirm-kill-emacs #'yes-or-no-p)
+  (defalias 'yes-or-no-p 'y-or-n-p) ; Use y/n instead of yes/no
+
+  ;; Custom file (Don't clutter init.el with auto-generated vars)
+  (setq custom-file (locate-user-emacs-file "custom.el"))
+  (when (file-exists-p custom-file)
+    (load custom-file)))
+
+;;; 3. UI & THEMES
+(use-package catppuccin-theme
+  :config
+  (load-theme 'catppuccin :no-confirm))
+
 (use-package doom-modeline
   :init (doom-modeline-mode 1))
-(use-package olivetti)
 
 (use-package nerd-icons)
+(use-package olivetti)
 
-;; session handling
+;; Window navigation bindings
+(global-set-key (kbd "M-<left>")  'windmove-left)
+(global-set-key (kbd "M-<right>") 'windmove-right)
+(global-set-key (kbd "M-<up>")    'windmove-up)
+(global-set-key (kbd "M-<down>")  'windmove-down)
+
+;;; 4. COMPLETION SYSTEM
+(use-package vertico
+  :init (vertico-mode t)
+  :custom
+  (read-buffer-completion-ignore-case t)
+  (read-file-name-completion-ignore-case t)
+  (completion-ignore-case t))
+
+(use-package corfu
+  :init (global-corfu-mode)
+  :custom
+  (corfu-auto t)
+  (corfu-auto-prefix 1)
+  (corfu-quit-no-match 'separator))
+
 (use-package easysession)
 
-;; command completion
-(use-package vertico
-  :config
-  ;; Enable completion by narrowing
-  (vertico-mode t)
-  (setq read-buffer-completion-ignore-case t
-	read-file-name-completion-ignore-case t
-	completion-ignore-case t))
-
-;; lsp support
-(use-package eglot
-  :config
-  ;; Enable line numbering in `prog-mode'
-  (add-hook 'prog-mode-hook #'display-line-numbers-mode)
-  ;; Automatically pair parentheses
-  (electric-pair-mode t)
-  ;; Enable LSP support by default in programming buffers
-  (add-hook 'prog-mode-hook #'eglot-ensure)
-  (add-hook 'zig-mode-hook #'eglot-ensure)
-  (add-hook 'ruby-mode-hook #'eglot-ensure)
-  (add-hook 'cperl-mode-hook #'eglot-ensure)
-  ;; Create a memorable alias for `eglot-ensure'.
-  (defalias 'start-lsp-server #'eglot))
-(setq eglot-autoshutdown 1)
-
-;; Pop-up completion
-(use-package corfu
-  :config
-  ;; Enable auto completion and configure quitting
-  (setq corfu-auto t
-	corfu-auto-prefix 1 ;; propose after typing 1 char
-	corfu-quit-no-match 'separator) ;; or t
-  ;; Enable autocompletion by default in programming buffers
-  (add-hook 'prog-mode-hook #'corfu-mode)
-  (add-hook 'org-mode-hook #'corfu-mode))
-
-;; Git client
+;;; 5. DEVELOPMENT & GIT
 (use-package magit
-  :config
-  ;; Bind the `magit-status' command to a convenient key.
-  (global-set-key (kbd "C-c g") #'magit-status))
-;; auto refresh magit on buffer save
-(with-eval-after-load 'magit-mode
-  (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
-;; git mark on buffer (next to line number)
-(use-package diff-hl)
-(global-diff-hl-mode)
+  :bind ("C-c g" . magit-status)
+  :hook (after-save . magit-after-save-refresh-status))
 
-;; c-mode setup
-(add-hook 'c-mode-common-hook
-          (lambda ()
-            (setq c-default-style "linux")
-            (setq c-basic-offset 8)
-            (setq indent-tabs-mode t)
-            (setq tab-width 8)
-            (eglot-ensure)))
-(add-hook 'c-mode-common-hook (lambda () (electric-indent-local-mode -1)))
-;; use spaces instead of tabs
-;;(use-package cc-mode)
-;;(setq-default indent-tabs-mode nil)
-;;(add-hook 'c-mode-common-hook '(lambda () (c-toggle-auto-state 1)))
-;;(setq c-default-style "linux"
-;;      c-basic-offset 4)
+(use-package diff-hl
+  :init (global-diff-hl-mode))
+
+(use-package eglot
+  :hook ((zig-mode ruby-mode cperl-mode c-mode-common) . eglot-ensure)
+  :custom
+  (eglot-autoshutdown t)
+  :config
+  (add-to-list 'eglot-server-programs '(cperl-mode . ("pls")))
+  (defalias 'start-lsp-server #'eglot))
+
+(use-package prog-mode
+  :ensure nil
+  :hook ((prog-mode . display-line-numbers-mode)
+         (prog-mode . electric-pair-mode)))
+
+(use-package dwim-shell-command)
+(setq comint-process-echoes t) ;; fix print command in *shell*
+
+;; Language specific modes
 (use-package go-mode)
 (use-package json-mode)
 (use-package lua-mode)
 (use-package markdown-mode)
 (use-package zig-mode)
+(use-package guix)
+
+(use-package cc-mode
+  :ensure nil
+  :hook (c-mode-common . (lambda ()
+                           (setq c-default-style "linux"
+                                 c-basic-offset 8
+                                 tab-width 8
+                                 indent-tabs-mode t)
+                           (electric-indent-local-mode -1))))
+
 (use-package cperl-mode
+  :custom
+  (cperl-close-paren-offset (- cperl-indent-level))
+  (cperl-indent-parens-as-block t)
   :config
-  (defalias 'perl-mode 'cperl-mode)
-  (setq cperl-close-paren-offset (- cperl-indent-level))
-  (setq cperl-indent-parens-as-block t)
   (custom-set-faces
    '(cperl-array-face ((t (:weight normal))))
    '(cperl-hash-face ((t (:weight normal))))))
+
 (use-package perl-doc)
-;; better for perl lsp
-(add-to-list 'eglot-server-programs '(perl-mode . ("pls")))
-;;(add-to-list 'eglot-server-programs `(perl-mode . ("/usr/local/bin/perlnavigator", "--stdio")))
-(use-package org
+
+(use-package ansi-color
+    :hook (compilation-filter . ansi-color-compilation-filter)) 
+
+;; TRAMP Configuration
+(use-package tramp
+  :ensure nil
   :config
-  (setq-default org-latex-compiler "pdflatex")
-  (setq org-html-validation-link nil)
-  ; avoid indent in src block
-  ; (setq-default org-edit-src-content-indentation 0)
-  (use-package org-superstar)
-  ;(add-hook 'org-mode-hook #'olivetti-mode)
-  (add-hook 'org-mode-hook #'org-superstar-mode)
-  (add-hook 'org-mode-hook #'org-indent-mode)
-  ;; export org to html
-  (use-package htmlize)
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  (mapc (lambda (path) (add-to-list 'tramp-remote-path path))
+        '("/bin" "/usr/bin" "/usr/local/bin" "/opt/bin" "/opt/homebrew/bin")))
+
+;;; 6. ORG MODE
+(use-package org
+  :hook ((org-mode . org-indent-mode)
+         (org-mode . org-superstar-mode))
+  :bind
+  (:map org-mode-map
+        ("M-S-<left>"  . org-metaleft)
+        ("M-S-<right>" . org-metaright)
+        ("M-S-<up>"    . org-metaup)
+        ("M-S-<down>"  . org-metadown))
+  :custom
+  (org-latex-compiler "pdflatex")
+  (org-html-validation-link nil)
+  (org-babel-python-command "python3")
+  :config
+  ;; Unbind Meta-arrow keys in Org to allow windmove to work
+  (define-key org-mode-map (kbd "<M-left>") nil)
+  (define-key org-mode-map (kbd "<M-right>") nil)
+  (define-key org-mode-map (kbd "<M-up>") nil)
+  (define-key org-mode-map (kbd "<M-down>") nil)
   
-  ;; Org babel setting (src/code block)
   (org-babel-do-load-languages
    'org-babel-load-languages
-   '((R . t)
-     (perl . t)
-     (sql . t)
-     (C . t)
-     (lua . t)
-     (shell . t)
-     (python . t)
-     (scheme . t)
-     (sqlite . t)
-     (emacs-lisp t)))
-  ;; otherwise fail using "python"
-  (setq org-babel-python-command "python3"))
+   '((R . t) (perl . t) (sql . t) (C . t) (lua . t)
+     (shell . t) (python . t) (scheme . t) (sqlite . t) (emacs-lisp . t))))
+
+(use-package org-superstar)
+(use-package htmlize)
+
+;;; 7. APPLICATIONS & MEDIA
+(use-package dired
+  :ensure nil
+  :custom (dired-kill-when-opening-new-dired-buffer t))
+
+(use-package emms
+  :config
+  (emms-all)
+  (emms-default-players)
+  (setq emms-player-list '(emms-player-vlc)))
 
 (use-package eat
   :load-path "/home/sibl/Documents/git/emacs-eat"
-  :config
-  ;; Close the terminal buffer when the shell terminates.
-  (setq eat-kill-buffer-on-exit t)
-  ;; Enable mouse-support.
-  (setq eat-enable-mouse t))
+  :custom
+  (eat-kill-buffer-on-exit t)
+  (eat-enable-mouse t))
 
-;; music player
-(use-package emms)
-(emms-all)
-(emms-default-players)
-(setq emms-player-list '(emms-player-vlc))
-;;      emms-info-functions '(emms-info-native))
-
-;; Guix
-(use-package guix)
-
-;; dired
-(setq dired-kill-when-opening-new-dired-buffer t)
-
-;;;;;;;;; other setup ;;;;;;;;;;;;;;
-
-;; homepage
-;;(add-hook 'after-init-hook 'recentf-open-files)
-;;(inhibit-startup-screen t)
-
-;; font setup
-;;(set-frame-font "FiraCode Nerd Font 13" nil t)
-;;(set-frame-font "Terminess Nerd Font 14" nil t)
-(setq default-frame-alist '((font . "Terminess Nerd Font 14")))
-
-;; hide toolbar
-(tool-bar-mode -1)
-(scroll-bar-mode -1)
-(menu-bar-mode -1)
-(setq-default cursor-in-non-selected-windows nil)
-
-;; Miscellaneous options
-(setq-default major-mode
-              (lambda () ; guess major mode from file name
-                (unless buffer-file-name
-                  (let ((buffer-file-name (buffer-name)))
-                    (set-auto-mode)))))
-(setq confirm-kill-emacs #'yes-or-no-p)
-(setq window-resize-pixelwise t)
-(setq frame-resize-pixelwise t)
-(save-place-mode t)
-(savehist-mode t)
-(recentf-mode t)
-
-;; ERC/IRC
 (use-package erc
+  :custom
+  (erc-server "irc.libera.chat")
+  (erc-port 6697)
+  (erc-nick "azval")
+  (erc-user-full-name "azval")
+  (erc-use-auth-source-for-nickserv-password t)
+  (erc-prompt-for-nickserv-password nil)
+  (erc-track-shorten-start 8)
+  (erc-hide-list '("JOIN" "PART" "NICK" "QUIT"))
+  (erc-server-reconnect-attempts 5)
+  (erc-server-reconnect-timeout 3)
+  (erc-kill-buffer-on-part t)
+  (erc-auto-query 'bury)
   :config
-  ;;(setq-default erc-server "lexihk.dimsumlabs.com")
-  ;;(setq-default erc-port 9988)
-  (setq-default erc-server "irc.libera.chat")
-  (setq-default erc-port 6697)
-  (setq-default erc-nick "azval")
-  (setq-default erc-user-full-name "azval")
-  (setq-default erc-use-auth-source-for-nickserv-password t)
-  (setq-default erc-prompt-for-nickserv-password nil)
-  (setq-default erc-track-shorten-start 8)
-  (setq erc-hide-list '("JOIN" "PART" "NICK" "QUIT"))
-  ;;(setq-default erc-autojoin-channels-alist '(("irc.libera.chat" "#dimsumlabs" "#emacs" "#guix" "#perl")))
-  (setq-default erc-server-reconnect-attempts 5)
-  (setq-default erc-server-reconnect-timeout 3)
-  (setq-default erc-kill-buffer-on-part t)
-  (setq-default erc-auto-query 'bury)
-  (setq-default erc-fill-static-center 18))
+  (erc-services-mode 1))
 
-;; GPG settings
-(setq epg-pinentry-mode 'loopback)
+;;; EMAIL (Gnus)
+;;(use-package gnus
+;;  :config
+;;  (setq user-full-name "Simon Blacks"
+;;        user-mail-address "you@example.com")
+;;  (setq gnus-select-method '(nnnil nil))
+;;  (setq gnus-secondary-select-methods
+;;	'((nnimap "MyMail"
+;;                 (nnimap-address "smtp.freesmtpservers.com")
+;;                 (nnimap-server-port 25)
+;;                 (nnimap-stream network))))
+;;  (setq send-mail-function 'smtpmail-send-it
+;;        message-send-mail-function 'smtpmail-send-it
+;;        smtpmail-smtp-server "smtp.freesmtpservers.com"
+;;        smtpmail-smtp-service 25
+;;        smtpmail-stream-type 'network)
+;;  (setq gnus-inhibit-images nil)
+;;  (setq mm-text-html-renderer 'shr)
+;;  ;; Clean up the summary view (Date | Sender | Subject)
+;;  (setq gnus-summary-line-format "%U%R%z %(%&user-date;  %-15,15f  %B%s%)\n")
+;;  (setq gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M")))
+;;  ;; Don't get the first article automatically:
+;;  (setq gnus-auto-select-first nil)
+;;  (setq smiley-style 'medium)
+;;  ;; Show more MIME-stuff:
+;;  (setq gnus-mime-display-multipart-related-as-mixed t)
+;;  (setq gnus-asynchronous t
+;;      gnus-use-cache t
+;;      gnus-use-header-prefetch t))
 
-;; smooth scrolling
-(setq scroll-conservatively 101)
-
-;; remove window decoration and add transparency
-(add-to-list 'default-frame-alist '(undecorated . t))
-(add-to-list 'default-frame-alist '(alpha-background . 90))
-;; set terminal transparent
-;;(defun term-transparent-frame ()
-;;  (unless window-system
-;;    (progn
-;;      (set-face-background 'default "unspecified-bg")
-;;      (set-face-background 'line-number "unspecified-bg"))))
-(add-hook 'tty-setup-hook 'term-transparent-frame)
-
-;; update buffer on file change
-(global-auto-revert-mode)
-
-;; bindings
-(define-key org-mode-map (kbd "<M-left>") nil)
-(define-key org-mode-map (kbd "<M-right>") nil)
-(define-key org-mode-map (kbd "<M-up>") nil)
-(define-key org-mode-map (kbd "<M-down>") nil)
-(global-set-key (kbd "M-<left>")  'windmove-left)
-(global-set-key (kbd "M-<right>") 'windmove-right)
-(global-set-key (kbd "M-<up>")    'windmove-up)
-(global-set-key (kbd "M-<down>")  'windmove-down)
-(define-key org-mode-map (kbd "M-S-<left>")  'org-metaleft)
-(define-key org-mode-map (kbd "M-S-<right>") 'org-metaright)
-(define-key org-mode-map (kbd "M-S-<up>")    'org-metaup)
-(define-key org-mode-map (kbd "M-S-<down>")  'org-metadown)
-
-;; custom functions
+;;; 8. CUSTOM FUNCTIONS
 (defun mosh-connect (host)
+  "Connect to HOST via mosh using TRAMP configuration."
   (interactive
    (list
     (completing-read
@@ -259,50 +269,9 @@
   (switch-to-buffer (eat (format "mosh %s" host)))
   (rename-buffer buffer-name))
 
-;; auth TRAMP setup
-(setq auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc"))
-(setq tramp-remote-path (list "/bin" "/usr/bin" "/sbin" "/usr/sbin"
-			      "/usr/local/bin" "/usr/local/sbin"
-			      "/local/bin" "/local/freeware/bin"
-			      "/local/gnu/bin" "/usr/freeware/bin"
-			      "/usr/pkg/bin" "/usr/contrib/bin"
-			      "/opt/bin" "/opt/sbin" "/opt/local/bin"
-			      "/opt/homebrew/bin" "/opt/homebrew/sbin"
-			      'tramp-own-remote-path))
-;; Configure Emacs to store autosave files in a specific local directory
-(setq auto-save-file-name-transforms
-      '((".*" "~/.emacs.d/auto-save/" t)))
-;; Optionally, also configure backup files
-(setq backup-directory-alist
-      '((".*" . "~/.emacs.d/backups/")))
-;; Create the directory if it doesn't exist (optional, Emacs usually creates it)
-(unless (file-exists-p "~/.emacs.d/auto-save/")
-  (make-directory "~/.emacs.d/auto-save/" t))
-;; For backup files too if you enabled them above
-(unless (file-exists-p "~/.emacs.d/backups/")
-  (make-directory "~/.emacs.d/backups/" t))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(Man-notify-method 'pushy)
- '(auth-source-save-behavior 'ask)
- '(erc-prompt-for-password nil)
- '(org-edit-src-content-indentation 0)
- '(package-selected-packages
-   '(auctex catppuccin-theme corfu diff-hl doom-modeline easysession eat
-	    emms exec-path-from-shell go-mode htmlize json-mode
-	    lua-mode magit markdown-mode mood-line nano-modeline
-	    nano-theme nim-mode olivetti org-modern org-superstar
-	    pyenv-mode rust-mode vertico zig-mode))
- '(tab-bar-mode 1)
- '(tab-bar-show 1))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(cperl-array-face ((t (:weight normal))))
- '(cperl-hash-face ((t (:weight normal)))))
+(defun term-transparent-frame ()
+  "Remove background color for transparent terminal."
+  (unless (display-graphic-p)
+    (set-face-background 'default "unspecified-bg")
+    (set-face-background 'line-number "unspecified-bg")))
+(add-hook 'tty-setup-hook 'term-transparent-frame)
