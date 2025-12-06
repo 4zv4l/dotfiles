@@ -16,6 +16,7 @@
                ("LC_ALL" . "en_US.UTF-8")
                ("XDG_DATA_DIRS" . "$XDG_DATA_DIRS:/home/sibl/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share")
                ("PERL5LIB" . "$HOME/perl5/lib/perl5:./local/lib/perl5:$PERL5LIB")
+               ("FONTCONFIG_PATH" . "$HOME/.guix-profile/etc/fonts")
                ("EDITOR"         . "nvim")))
             (aliases
              '(("cat" . "bat")

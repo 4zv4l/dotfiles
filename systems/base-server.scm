@@ -7,12 +7,11 @@
   #:use-module (gnu system file-systems)
   #:use-module (gnu system keyboard)
   #:use-module (gnu system shadow)
+  #:use-module (gnu services networking)
   #:use-module (guix channels)
   #:use-module (guix gexp)
   #:use-module (nongnu packages linux)
   #:export (base-server %my-base-services))
-
-(use-service-modules cups desktop networking ssh)
 
 (define %my-channels
   (list (channel

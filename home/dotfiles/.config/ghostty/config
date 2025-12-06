@@ -1,7 +1,7 @@
 font-family = FiraCode Nerd Font
 window-title-font-family = FiraCode Nerd Font
 window-theme = ghostty
-theme = catppuccin-mocha
+theme = Catppuccin Mocha
 window-decoration = false
 shell-integration-features = no-cursor
 cursor-style = underline

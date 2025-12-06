@@ -1,4 +1,4 @@
-(define-module (home lexidoo-home)
+(define-module (home lexihk-home)
   #:use-module (gnu home)
   #:use-module (gnu home services)
   #:use-module (gnu home services dotfiles)
@@ -12,7 +12,7 @@
   #:use-module (home fish)
   #:use-module (home packages)
   #:use-module (home services emacs)
-  #:use-module (home services odoo)
+  #:use-module (home services syncthing)
   #:use-module (home ssh)
   #:use-module (ice-9 string-fun))
 

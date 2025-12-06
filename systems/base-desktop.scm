@@ -8,12 +8,14 @@
   #:use-module (gnu system file-systems)
   #:use-module (gnu system keyboard)
   #:use-module (gnu system shadow)
+  #:use-module (gnu services cups)
+  #:use-module (gnu services desktop)
+  #:use-module (gnu services networking)
+  #:use-module (gnu services ssh)
   #:use-module (guix channels)
   #:use-module (guix gexp)
   #:use-module (nongnu packages linux)
   #:export (base-desktop %my-base-desktop-services))
-
-(use-service-modules cups desktop networking ssh)
 
 (define %my-channels
   (list (channel
