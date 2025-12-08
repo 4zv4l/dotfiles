@@ -26,7 +26,6 @@
                ("tb" . "ncat termbin.com 9999")
                ("praku" . "podman run --name raku -ti --sig-proxy=true --network=host --rm -v \"$(pwd):/script\" -w /script rakudo-star raku")
                ("6d" . "RAKUDOC=~/Documents/git/doc rakudoc -D")
-               ("simplex" . "guix shell -C -F -N --share=/home/sibl/.simplex zlib openssl gmp -- ~/.local/bin/simplex -s smp://WCTnRSS3L3aCjLzaA0bin9XxLQkWhLECUQGxJ_kr5h0=:superfoobar@lexihk.dimsumlabs.com")
                ("v"   . "nvim")))
             (config
              (list (plain-file "rc"
