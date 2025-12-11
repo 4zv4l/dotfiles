@@ -1,5 +1,6 @@
 (define-module (home packages)
   #:use-module (gnu packages)
+  #:use-module (sibl zfortune)
   #:export (home-packages))
 
 (define home-packages
