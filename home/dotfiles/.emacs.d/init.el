@@ -36,7 +36,7 @@
   ;; Font (Fallback if daemon/client setup differs)
   (add-to-list 'default-frame-alist '(font . "Terminess Nerd Font 14"))
   (add-to-list 'default-frame-alist '(undecorated . t))
-  (add-to-list 'default-frame-alist '(alpha-background . 90))
+  (add-to-list 'default-frame-alist '(alpha-background . 95))
 
   ;; Scrolling
   (setq scroll-conservatively 101
@@ -129,6 +129,7 @@
 (use-package lua-mode)
 (use-package markdown-mode)
 (use-package zig-mode)
+(use-package rust-mode)
 (use-package guix)
 
 (use-package cc-mode
@@ -224,36 +225,6 @@
   (erc-auto-query 'bury)
   :config
   (erc-services-mode 1))
-
-;;; EMAIL (Gnus)
-;;(use-package gnus
-;;  :config
-;;  (setq user-full-name "Simon Blacks"
-;;        user-mail-address "you@example.com")
-;;  (setq gnus-select-method '(nnnil nil))
-;;  (setq gnus-secondary-select-methods
-;;	'((nnimap "MyMail"
-;;                 (nnimap-address "smtp.freesmtpservers.com")
-;;                 (nnimap-server-port 25)
-;;                 (nnimap-stream network))))
-;;  (setq send-mail-function 'smtpmail-send-it
-;;        message-send-mail-function 'smtpmail-send-it
-;;        smtpmail-smtp-server "smtp.freesmtpservers.com"
-;;        smtpmail-smtp-service 25
-;;        smtpmail-stream-type 'network)
-;;  (setq gnus-inhibit-images nil)
-;;  (setq mm-text-html-renderer 'shr)
-;;  ;; Clean up the summary view (Date | Sender | Subject)
-;;  (setq gnus-summary-line-format "%U%R%z %(%&user-date;  %-15,15f  %B%s%)\n")
-;;  (setq gnus-user-date-format-alist '((t . "%Y-%m-%d %H:%M")))
-;;  ;; Don't get the first article automatically:
-;;  (setq gnus-auto-select-first nil)
-;;  (setq smiley-style 'medium)
-;;  ;; Show more MIME-stuff:
-;;  (setq gnus-mime-display-multipart-related-as-mixed t)
-;;  (setq gnus-asynchronous t
-;;      gnus-use-cache t
-;;      gnus-use-header-prefetch t))
 
 ;;; 8. CUSTOM FUNCTIONS
 (defun mosh-connect (host)
