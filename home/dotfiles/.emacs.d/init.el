@@ -135,10 +135,10 @@
 (use-package cc-mode
   :ensure nil
   :hook (c-mode-common . (lambda ()
-                           (setq c-default-style "linux"
-                                 c-basic-offset 8
-                                 tab-width 8
-                                 indent-tabs-mode t)
+                           (setq c-default-style "linux")
+                                 ;c-basic-offset 8
+                                 ;tab-width 8
+                                 ;indent-tabs-mode t)
                            (electric-indent-local-mode -1))))
 
 (use-package cperl-mode
