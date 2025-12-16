@@ -170,14 +170,6 @@ cmp.setup {
 -- git sign on the left
 require('gitsigns').setup()
 
--- pop-up float terminal
-require'FTerm'.setup({
-    border = 'rounded',
-    auto_close = true,
-})
-vim.keymap.set('n', '<C-i>', '<CMD>lua require("FTerm").toggle()<CR>')
-vim.keymap.set('t', '<C-i>', '<C-\\><C-n><CMD>lua require("FTerm").toggle()<CR>')
-
 -- file browser
 vim.keymap.set("n", "<space>fb", function()
 	require("telescope").extensions.file_browser.file_browser()

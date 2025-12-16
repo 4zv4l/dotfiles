@@ -100,6 +100,18 @@
 
   (list
    (file-system
+       (device "/storage/flatpaks/app")
+       (mount-point "/home/sibl/.var/app")
+       (type "none")
+       (check? #f)
+       (flags '(bind-mount)))
+   (file-system
+       (device "/storage/flatpaks/flatpak")
+       (mount-point "/home/sibl/.local/share/flatpak")
+       (type "none")
+       (check? #f)
+       (flags '(bind-mount)))
+   (file-system
     (mount-point "/boot/efi")
     (device
      (uuid "5239-9D1C" 'fat32))
