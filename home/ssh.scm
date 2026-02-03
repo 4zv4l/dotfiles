@@ -12,7 +12,7 @@
                       (user "git")
                       (identity-file "~/.ssh/github"))
         (openssh-host (name "lexihk")
-                      (host-name "lexihk.dimsumlabs.com")
+                      (host-name "lexiz.xyz")
                       (user "azz")
                       (port 2200))
         (openssh-host (name "lexijarod")

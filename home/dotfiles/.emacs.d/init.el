@@ -65,6 +65,9 @@
   (when (file-exists-p custom-file)
     (load custom-file)))
 
+;; emoji
+(defvar overriding-text-conversion-style nil)
+
 ;;; 3. UI & THEMES
 (use-package catppuccin-theme
   :config
@@ -133,14 +136,13 @@
 (use-package guix)
 
 (use-package cc-mode
-  :ensure nil
   :hook (c-mode-common . (lambda ()
-                           (setq c-default-style "linux")
-                                 ;c-basic-offset 8
-                                 ;tab-width 8
-                                 ;indent-tabs-mode t)
-                           (electric-indent-local-mode -1))))
-
+			   (c-set-style "linux")
+			   (c-toggle-auto-newline)
+			   (setq c-basic-offset 8
+				 indent-tabs-mode 1
+				 tab-width 8))))
+            
 (use-package cperl-mode
   :custom
   (cperl-close-paren-offset (- cperl-indent-level))
